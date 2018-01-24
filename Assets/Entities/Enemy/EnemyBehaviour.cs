@@ -7,8 +7,18 @@ public class EnemyBehaviour : MonoBehaviour {
     public GameObject projectile;
     public float projectilespeed = 5f;
     public float health = 150;
+    public float shotsPerSeconds = 0.5f;
 
     void Update()
+    {
+        float probability = Time.deltaTime * shotsPerSeconds;
+        if(Random.value < probability)
+        {
+            Fire();
+        }
+    }
+
+    void Fire()
     {
         Vector3 startPosition = transform.position + new Vector3(0f, -1f, 0f);
         GameObject missile = Instantiate(projectile, startPosition, Quaternion.identity) as GameObject;
