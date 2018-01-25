@@ -5,9 +5,20 @@ using UnityEngine;
 public class EnemyBehaviour : MonoBehaviour {
 
     public GameObject projectile;
+    public AudioClip fireSound;
+    public AudioClip deathSound;
+
     public float projectilespeed = 5f;
     public float health = 150;
     public float shotsPerSeconds = 0.5f;
+    public int scoreValue = 150;      
+
+    private ScoreKeeper scoreKeeper;
+
+    void Start()
+    {
+        scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
+    }
 
     void Update()
     {
@@ -23,6 +34,7 @@ public class EnemyBehaviour : MonoBehaviour {
         Vector3 startPosition = transform.position + new Vector3(0f, -1f, 0f);
         GameObject missile = Instantiate(projectile, startPosition, Quaternion.identity) as GameObject;
         missile.GetComponent<Rigidbody2D>().velocity = new Vector3(0f, -projectilespeed, 0f);
+        AudioSource.PlayClipAtPoint(fireSound, transform.position);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -35,10 +47,16 @@ public class EnemyBehaviour : MonoBehaviour {
             missile.Hit();
             if(health <= 0)
             {
-                Destroy(gameObject);
+                Die();
             }
-        }
-        
+        }        
+    }
+
+    void Die()
+    {
+        AudioSource.PlayClipAtPoint(deathSound, transform.position);
+        Destroy(gameObject);
+        scoreKeeper.Score(scoreValue);
     }
 
 }

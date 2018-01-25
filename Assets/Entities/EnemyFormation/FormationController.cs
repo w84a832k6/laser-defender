@@ -22,7 +22,7 @@ public class FormationController : MonoBehaviour {
         xmax = rightEdge.x;
         xmin = leftEdge.x;
 
-        SpawnUntilFull();
+        SpawnEnemies();
     }
 
     void SpawnEnemies()
@@ -55,7 +55,7 @@ public class FormationController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(movingRight)
+        if (movingRight)
         {
             transform.position += Vector3.right * speed * Time.deltaTime;
         }
@@ -66,9 +66,13 @@ public class FormationController : MonoBehaviour {
 
         float rightEdgeOfFormation = transform.position.x + (0.5f * width);
         float leftEdgeOfFormation = transform.position.x - (0.5f * width);
-        if(leftEdgeOfFormation < xmin || rightEdgeOfFormation > xmax)
+        if(leftEdgeOfFormation < xmin)
         {
-            movingRight = !movingRight;
+            movingRight = true;
+        }
+        else if(rightEdgeOfFormation > xmax)
+        {
+            movingRight = false;
         }
         if(AllMembersDead())
         {
